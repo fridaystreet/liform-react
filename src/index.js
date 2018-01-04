@@ -26,12 +26,13 @@ const Liform = props => {
   props.schema.showLabel = false;
   const schema = compileSchema(props.schema);
   const formName = props.formKey || props.schema.title || "form";
-  const FinalForm = reduxForm({
+  const reduxFormOptions = Object.assign{{}, props.reduxFormOptions, {
     form: props.formKey || props.schema.title || "form",
     validate: props.syncValidation || buildSyncValidation(schema, props.ajv),
     initialValues: props.initialValues,
     context: { ...props.context, formName }
-  })(props.baseForm || BaseForm);
+  }};
+  const FinalForm = reduxForm(reduxFormOptions)(props.baseForm || BaseForm);
   return (
     <FinalForm
       renderFields={renderField.bind(this)}
@@ -49,6 +50,7 @@ Liform.propTypes = {
   formKey: PropTypes.string,
   baseForm: PropTypes.func,
   context: PropTypes.object,
+  reduxFormOptions: PropTypes.object,
   ajv: PropTypes.object
 };
 
